@@ -10,93 +10,132 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
     <title>Verify your email address</title>
     <style>
+      body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; }
+      table { border-collapse: separate; }
+      a { text-decoration: none; }
       @media only screen and (max-width:620px) {
-        .email-wrapper { padding: 18px 10px !important; }
-        .email-card { border-radius: 14px !important; }
-        .email-pad { padding-left: 22px !important; padding-right: 22px !important; }
-        .email-heading { font-size: 24px !important; line-height: 1.25 !important; }
+        .email-wrapper { padding: 14px 10px 28px !important; }
+        .email-card { border-radius: 20px !important; }
+        .email-pad { padding-left: 24px !important; padding-right: 24px !important; }
+        .email-heading { font-size: 27px !important; line-height: 1.2 !important; }
+        .email-button-cell { display: block !important; width: 100% !important; }
         .email-button { display: block !important; text-align: center !important; }
-        .email-steps td { display: block !important; width: 100% !important; padding: 0 0 10px !important; }
       }
     </style>
   </head>
-  <body style="margin:0;padding:0;background:#f3f0e7;">
+  <body style="margin:0;padding:0;background:#ecefe6;" bgcolor="#ecefe6">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
       One click verifies your email and opens your private TalaArawan journal.
     </div>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-wrapper" style="background:#f3f0e7;padding:40px 16px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-wrapper" style="background:#ecefe6;padding:40px 16px 48px;" bgcolor="#ecefe6">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-card" style="max-width:580px;background:#fffdf8;border:1px solid #e4dccb;border-radius:20px;box-shadow:0 24px 60px -34px rgba(30,52,38,0.45);overflow:hidden;">
 
-            <!-- Brand bar -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-card" style="max-width:580px;background:#fffdf8;border-radius:28px;box-shadow:0 30px 70px -40px rgba(24,48,34,0.6);overflow:hidden;" bgcolor="#fffdf8">
+
+            <!-- Hero -->
             <tr>
-              <td style="height:5px;background:linear-gradient(90deg,#2f5d46 0%,#6f957c 55%,#d9c9a3 100%);"></td>
-            </tr>
-            <tr>
-              <td class="email-pad" style="padding:28px 34px 0;">
+              <td class="email-pad" bgcolor="#1f3b2d" style="background:#1f3b2d;background-image:linear-gradient(135deg,#2c5641 0%,#1f3b2d 60%,#183024 100%);padding:32px 36px 40px;">
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                   <tr>
-                    <td width="42" style="width:42px;height:42px;background:#2f5d46;border-radius:12px;text-align:center;vertical-align:middle;">
-                      <span style="font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;color:#fffdf8;line-height:42px;">TA</span>
+                    <td width="40" height="40" align="center" valign="middle" bgcolor="#3b6a52" style="width:40px;height:40px;background:#3b6a52;border-radius:12px;">
+                      <span style="font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:700;color:#fffdf8;line-height:40px;">TA</span>
                     </td>
                     <td style="padding-left:12px;vertical-align:middle;">
-                      <span style="display:block;font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;color:#22352a;">TalaArawan</span>
-                      <span style="display:block;margin-top:3px;font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#8a806d;">Philippine field notes</span>
+                      <span style="display:block;font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;line-height:1;color:#fffdf8;">TalaArawan</span>
+                    </td>
+                  </tr>
+                </table>
+
+                <h1 class="email-heading" style="margin:34px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.18;font-weight:700;letter-spacing:-0.3px;color:#fffdf8;">One more step, then your journal is yours.</h1>
+                <p style="margin:14px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#c4d9c9;">
+                  Confirm your email to activate your account and start logging your OJT.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Greeting + CTA -->
+            <tr>
+              <td class="email-pad" style="padding:32px 36px 0;">
+                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#4a463b;">
+                  Hi <strong style="color:#2f5d46;">{{ .Email }}</strong>, thanks for creating a TalaArawan account. It takes one click to verify this address.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="email-pad" style="padding:26px 36px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td class="email-button-cell" align="left">
+                      <a href="{{ .ConfirmationURL }}" class="email-button" style="display:inline-block;background:#2f5d46;color:#fffdf8;padding:17px 34px;border-radius:14px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;line-height:1;box-shadow:0 14px 26px -14px rgba(47,93,70,0.95);">Verify email address</a>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-
-            <!-- Eyebrow + heading -->
             <tr>
-              <td class="email-pad" style="padding:26px 34px 0;">
-                <span style="display:inline-block;padding:5px 10px;background:#e8f0e9;border-radius:999px;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#2f5d46;">Account verification</span>
-                <h1 class="email-heading" style="margin:16px 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:29px;line-height:1.22;font-weight:700;color:#1f2e24;">One more step, then your journal is yours.</h1>
-                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#514b3f;">
-                  Hi <strong style="color:#2f5d46;">{{ .Email }}</strong>, thanks for creating a TalaArawan account. Confirm your email address to activate it.
-                </p>
-              </td>
-            </tr>
-
-            <!-- CTA -->
-            <tr>
-              <td align="center" style="padding:28px 34px 6px;">
-                <a href="{{ .ConfirmationURL }}" class="email-button" style="display:inline-block;background:#2f5d46;color:#fffdf8;padding:15px 30px;border-radius:11px;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;line-height:1;box-shadow:0 10px 22px -12px rgba(47,93,70,0.9);">Verify email address</a>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:12px 34px 0;">
-                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.7;color:#8a806d;">Button not working? Paste this link into your browser:</p>
-                <p style="margin:6px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.7;word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:#2f5d46;text-decoration:underline;">{{ .ConfirmationURL }}</a></p>
+              <td class="email-pad" style="padding:18px 36px 0;">
+                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#8a846f;">Button not working? Paste this link into your browser:</p>
+                <p style="margin:4px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:#2f5d46;text-decoration:underline;">{{ .ConfirmationURL }}</a></p>
               </td>
             </tr>
 
             <!-- What happens next -->
             <tr>
-              <td class="email-pad" style="padding:26px 34px 0;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-steps" style="border-top:1px solid #eae3d5;">
+              <td class="email-pad" style="padding:34px 36px 0;">
+                <p style="margin:0 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:700;color:#1f2e24;">What happens next</p>
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                   <tr>
-                    <td width="34" valign="top" style="padding-top:18px;">
-                      <span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#e8f0e9;color:#2f5d46;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;">1</span>
+                    <td bgcolor="#f5f2e8" style="background:#f5f2e8;border-radius:16px;padding:16px 18px;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td width="40" valign="top" style="width:40px;">
+                            <span style="display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#dfeae1;color:#2f5d46;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:700;">1</span>
+                          </td>
+                          <td valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a463b;">
+                            <strong style="display:block;color:#22352a;">Click the button above</strong>
+                            This link is unique to your account and expires soon.
+                          </td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding-top:18px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#514b3f;"><strong style="color:#2f5d46;">Click the button above.</strong> This link is unique to your account and expires soon.</td>
                   </tr>
+                  <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
                   <tr>
-                    <td width="34" valign="top" style="padding-top:12px;">
-                      <span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#e8f0e9;color:#2f5d46;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;">2</span>
+                    <td bgcolor="#f5f2e8" style="background:#f5f2e8;border-radius:16px;padding:16px 18px;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td width="40" valign="top" style="width:40px;">
+                            <span style="display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#dfeae1;color:#2f5d46;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:700;">2</span>
+                          </td>
+                          <td valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a463b;">
+                            <strong style="display:block;color:#22352a;">Set up your OJT</strong>
+                            Add your required hours, start date and weekly schedule. It takes about a minute.
+                          </td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#514b3f;"><strong style="color:#2f5d46;">Set up your OJT.</strong> Add your required hours, start date, and weekly schedule — takes about a minute.</td>
                   </tr>
+                  <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
                   <tr>
-                    <td width="34" valign="top" style="padding-top:12px;">
-                      <span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#e8f0e9;color:#2f5d46;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;">3</span>
+                    <td bgcolor="#f5f2e8" style="background:#f5f2e8;border-radius:16px;padding:16px 18px;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td width="40" valign="top" style="width:40px;">
+                            <span style="display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:#dfeae1;color:#2f5d46;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:700;">3</span>
+                          </td>
+                          <td valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4a463b;">
+                            <strong style="display:block;color:#22352a;">Start logging</strong>
+                            Your entries stay private. Only your account can read or change them.
+                          </td>
+                        </tr>
+                      </table>
                     </td>
-                    <td style="padding-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#514b3f;"><strong style="color:#2f5d46;">Start logging.</strong> Your entries stay private — only your account can read or change them.</td>
                   </tr>
                 </table>
               </td>
@@ -104,22 +143,33 @@
 
             <!-- Security note -->
             <tr>
-              <td class="email-pad" style="padding:22px 34px 0;">
-                <div style="padding:14px 16px;background:#f6f1e6;border-left:3px solid #2f5d46;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.65;color:#605a4c;">
-                  <strong style="color:#3a3529;">Didn't create this account?</strong> You can safely ignore this email. No account is activated until the link is clicked.
-                </div>
-              </td>
-            </tr>
-
-            <!-- Footer -->
-            <tr>
-              <td class="email-pad" style="padding:24px 34px 30px;">
-                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;color:#8a806d;">Account verification · Your journal is private by default.</p>
-                <p style="margin:6px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;color:#8a806d;">Sent to {{ .Email }} because a TalaArawan account was created for this address.</p>
+              <td class="email-pad" style="padding:26px 36px 36px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td bgcolor="#eaf1ea" style="background:#eaf1ea;border-radius:16px;padding:16px 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.65;color:#41503f;">
+                      <strong style="color:#22352a;">Didn't create this account?</strong> You can safely ignore this email. Nothing is activated until the link is clicked.
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
 
           </table>
+
+          <!-- Footer -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;">
+            <tr>
+              <td class="email-pad" align="center" style="padding:22px 24px 0;">
+                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.7;color:#7d8574;">
+                  Sent to {{ .Email }} because a TalaArawan account was created for this address.
+                </p>
+                <p style="margin:4px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.7;color:#7d8574;">
+                  TalaArawan · Philippine field notes. Your journal is private by default.
+                </p>
+              </td>
+            </tr>
+          </table>
+
         </td>
       </tr>
     </table>
