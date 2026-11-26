@@ -27,6 +27,7 @@ Students can create an account, set their required hours and a flexible weekly s
 - Settings for profile, schedule, password reset, and sign out
 - Local draft autosave while filling out an entry
 - Responsive layout: collapsible sidebar on desktop, compact top bar and bottom navigation on mobile
+- Installable on phones: web app manifest and branded icons give an "Add to Home Screen" standalone app experience on iOS and Android
 - Toast notifications and a custom confirmation dialog instead of browser alerts
 
 ## Setup

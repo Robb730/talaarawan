@@ -20,6 +20,13 @@ type Mode = 'signin' | 'signup' | 'reset' | 'update'
 
 const SIGNUP_EMAIL_KEY = 'talaarawan:last-signup-email'
 
+const verifyCopy = {
+  eyebrow: 'Account verification',
+  title: 'Check your email',
+  sub: 'That verification link is invalid or has expired. Request a fresh one below.',
+  cta: 'Send new link',
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Scoped motion. No tailwind.config changes needed; everything is prefixed.  */
 /*  Every animation is switched off under prefers-reduced-motion.             */
@@ -423,7 +430,7 @@ export default function AuthPage() {
   if (!loading && user && mode !== 'update' && !confirmingEmail)
     return <Navigate to="/" replace />
 
-  const text = copy[mode]
+  const text = showResend ? verifyCopy : copy[mode]
   const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword
 
   const fail = (message: string) => {
@@ -603,7 +610,7 @@ export default function AuthPage() {
             </div>
 
             {/* Tabs with a sliding underline */}
-            <Collapse open={mode === 'signin' || mode === 'signup'}>
+            <Collapse open={!showResend && (mode === 'signin' || mode === 'signup')}>
               <div className="relative mt-4 grid grid-cols-2 border-b border-paper-300" role="tablist">
                 {(['signin', 'signup'] as const).map((tab) => (
                   <button
@@ -647,7 +654,7 @@ export default function AuthPage() {
                 <span>{notice}</span>
               </div>
             )}
-            {error && (
+            {error && !showResend && (
               <div
                 key={errorKey}
                 role="alert"
@@ -684,6 +691,17 @@ export default function AuthPage() {
                     You can send another link in {cooldown}s.
                   </p>
                 )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowResend(false)
+                    setError(null)
+                    setNotice(null)
+                  }}
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-forest-700 hover:underline"
+                >
+                  <ArrowRight className="h-3.5 w-3.5 rotate-180" /> Back to sign in
+                </button>
               </div>
             )}
 
@@ -709,6 +727,7 @@ export default function AuthPage() {
               </div>
             )}
 
+            {!showResend && (
             <form
               onSubmit={handleSubmit}
               className={`mt-2 ${confirmingEmail ? 'hidden' : ''}`}
@@ -823,7 +842,9 @@ export default function AuthPage() {
                 </span>
               </Button>
             </form>
+            )}
 
+            {!showResend && (
             <p className="mt-5 text-center text-[13px] text-ink-500">
               <span key={mode} className="aj-swap inline-block">
                 {mode === 'signin' ? (
@@ -850,6 +871,7 @@ export default function AuthPage() {
                 )}
               </span>
             </p>
+            )}
 
             <div className="mt-8 flex items-start gap-2 border-t border-paper-200 pt-4 text-[11px] leading-relaxed text-ink-400">
               <BookMarked className="mt-0.5 h-3.5 w-3.5 shrink-0" />
