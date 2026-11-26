@@ -13,9 +13,12 @@ import {
   LockKeyhole,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 import { Button, Field, Input } from '../components/ui'
 
 type Mode = 'signin' | 'signup' | 'reset' | 'update'
+
+const SIGNUP_EMAIL_KEY = 'talaarawan:last-signup-email'
 
 /* -------------------------------------------------------------------------- */
 /*  Scoped motion. No tailwind.config changes needed; everything is prefixed.  */
@@ -309,6 +312,16 @@ function authErrorMessage(cause: unknown): string {
   return error?.message || 'Something went wrong. Please try again.'
 }
 
+function friendlyLinkError(params: URLSearchParams): string | null {
+  const code = params.get('error_code')
+  const description = params.get('error_description')
+  if (!code && !description) return null
+  if (code === 'otp_expired' || /invalid or has expired/i.test(description ?? '')) {
+    return 'This verification link is invalid or has expired. Request a new one below.'
+  }
+  return description || 'This link could not be used. Please try again.'
+}
+
 export default function AuthPage() {
   const {
     user,
@@ -346,8 +359,16 @@ export default function AuthPage() {
     )
   })
   const [error, setError] = useState<string | null>(() =>
-    new URLSearchParams(window.location.hash.replace(/^#/, '')).get('error_description'),
+    friendlyLinkError(new URLSearchParams(window.location.hash.replace(/^#/, ''))),
   )
+  const [showResend, setShowResend] = useState(() => {
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+    return params.get('error_code') === 'otp_expired'
+  })
+  const [resendEmail, setResendEmail] = useState(
+    () => localStorage.getItem(SIGNUP_EMAIL_KEY) ?? '',
+  )
+  const [resendBusy, setResendBusy] = useState(false)
   const [errorKey, setErrorKey] = useState(0)
   const [notice, setNotice] = useState<string | null>(null)
   const [cooldown, setCooldown] = useState(0)
@@ -364,8 +385,9 @@ export default function AuthPage() {
     const accessToken = params.get('access_token')
     const refreshToken = params.get('refresh_token')
     const type = params.get('type')
-    const hashError = params.get('error_description')
+    const hashError = params.get('error_description') || params.get('error_code')
     if (hashError) {
+      // The error state was initialized from this same hash on first render.
       window.history.replaceState(null, '', window.location.pathname + window.location.search)
       return
     }
@@ -413,6 +435,7 @@ export default function AuthPage() {
     if (next === mode) return
     setMode(next)
     setError(null)
+    setShowResend(false)
     setNotice(null)
     setConfirmPassword('')
   }
@@ -445,6 +468,8 @@ export default function AuthPage() {
       } else if (mode === 'signup') {
         const needsConfirmation = await signUp(email.trim(), password, fullName.trim())
         if (needsConfirmation) {
+          localStorage.setItem(SIGNUP_EMAIL_KEY, email.trim())
+          setResendEmail(email.trim())
           setNotice(
             'Account created. Check your email to confirm your address, then sign in.',
           )
@@ -468,6 +493,28 @@ export default function AuthPage() {
     } finally {
       setBusy(false)
       submittingRef.current = false
+    }
+  }
+
+  const handleResend = async (event: FormEvent) => {
+    event.preventDefault()
+    const address = resendEmail.trim()
+    if (!address || resendBusy || cooldown > 0) return
+    setResendBusy(true)
+    setError(null)
+    setNotice(null)
+    try {
+      const { error: resendError } = await supabase.auth.resend({ type: 'signup', email: address })
+      if (resendError) throw resendError
+      localStorage.setItem(SIGNUP_EMAIL_KEY, address)
+      setShowResend(false)
+      setNotice('A new verification email is on its way. Check your inbox and spam folder.')
+      setCooldown(60)
+    } catch (cause) {
+      fail(authErrorMessage(cause))
+      if (isRateLimit(cause)) setCooldown(60)
+    } finally {
+      setResendBusy(false)
     }
   }
 
@@ -608,6 +655,35 @@ export default function AuthPage() {
               >
                 <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>{error}</span>
+              </div>
+            )}
+
+            {showResend && (
+              <div className="aj-pop mb-4 rounded-xl border border-forest-200 bg-forest-50/60 p-4">
+                <p className="text-[13px] font-semibold text-ink-900">Resend verification email</p>
+                <p className="mt-1 text-[12px] leading-relaxed text-ink-500">
+                  Enter the email you signed up with and we&rsquo;ll send a fresh link. Links expire
+                  and can be used only once — opening them twice (including link scanners) makes
+                  them invalid.
+                </p>
+                <form onSubmit={handleResend} className="mt-3 flex flex-col gap-2 sm:flex-row">
+                  <Input
+                    type="email"
+                    required
+                    value={resendEmail}
+                    onChange={(event) => setResendEmail(event.target.value)}
+                    placeholder="you@example.com"
+                    aria-label="Email address for a new verification link"
+                  />
+                  <Button type="submit" loading={resendBusy || cooldown > 0} className="shrink-0">
+                    Send new link
+                  </Button>
+                </form>
+                {cooldown > 0 && (
+                  <p className="mt-2 text-[11px] text-ink-400">
+                    You can send another link in {cooldown}s.
+                  </p>
+                )}
               </div>
             )}
 
