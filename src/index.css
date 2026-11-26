@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+
+  /* Warm paper neutrals */
+  --color-paper-50: #fbfaf6;
+  --color-paper-100: #f5f1e8;
+  --color-paper-200: #e9e3d5;
+  --color-paper-300: #d8cfbc;
+  --color-paper-400: #c3b8a2;
+
+  /* Ink */
+  --color-ink-950: #161510;
+  --color-ink-900: #22201a;
+  --color-ink-800: #332f26;
+  --color-ink-700: #4b463a;
+  --color-ink-600: #5f594b;
+  --color-ink-500: #786f5f;
+  --color-ink-400: #968d7c;
+  --color-ink-300: #b3ab9b;
+
+  /* Deep forest accent */
+  --color-forest-50: #eff4ef;
+  --color-forest-100: #dfeade;
+  --color-forest-200: #c2d7c3;
+  --color-forest-300: #9cbc9e;
+  --color-forest-400: #739c78;
+  --color-forest-500: #527d5c;
+  --color-forest-600: #3f644b;
+  --color-forest-700: #33503d;
+  --color-forest-800: #2a4132;
+  --color-forest-900: #22352a;
+
+  /* Clay accent for destructive / urgent bits */
+  --color-clay-50: #fbf1ec;
+  --color-clay-100: #f7e6de;
+  --color-clay-200: #eecaba;
+  --color-clay-500: #b45c3d;
+  --color-clay-600: #9d4a2f;
+  --color-clay-700: #833d27;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-paper-50 text-ink-900 antialiased;
+  background-image:
+    radial-gradient(900px 620px at 4% -8%, rgba(156, 188, 158, 0.38), transparent 62%),
+    radial-gradient(720px 520px at 102% 4%, rgba(195, 184, 162, 0.34), transparent 58%),
+    radial-gradient(820px 640px at 48% 112%, rgba(114, 156, 120, 0.2), transparent 62%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+::selection {
+  background: var(--color-forest-100);
+  color: var(--color-ink-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-forest-500);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-400;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-white/65 bg-white/60 shadow-[0_22px_70px_-42px_rgba(34,53,42,0.45)] backdrop-blur-xl;
+  }
+
+  .panel-muted {
+    @apply rounded-2xl border border-white/55 bg-white/35 backdrop-blur-lg;
+  }
+
+  .glass-soft {
+    @apply border border-white/60 bg-white/45 backdrop-blur-xl;
+  }
+
+  .glass-dark {
+    background-color: rgba(34, 53, 42, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+  }
+
+  .glass-field {
+    @apply border border-white/70 bg-white/70 backdrop-blur-lg;
+  }
+
+  .field-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-500;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .paper-lines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      rgba(251, 250, 246, 0.07) 31px,
+      rgba(251, 250, 246, 0.07) 32px
+    );
+  }
+
+  .login-lines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 35px,
+      rgba(34, 32, 26, 0.055) 35px,
+      rgba(34, 32, 26, 0.055) 36px
+    );
+  }
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popover-panel {
+  animation: popover-in 120ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 111, 95, 0.35) transparent;
+}
+
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.thin-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(120, 111, 95, 0.3);
+}
+
+/* Screen / print helpers for the printable report */
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-report {
+    font-family: "Instrument Sans", Arial, sans-serif;
+    color: #000;
+  }
+
+  .print-report h1 {
+    font-family: Georgia, serif;
+    font-size: 18pt;
+    margin: 0 0 3mm;
+  }
+
+  .print-report table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+  }
+
+  .print-report th,
+  .print-report td {
+    border: 1px solid #777;
+    padding: 4px 6px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .print-report thead {
+    display: table-header-group;
+  }
+
+  .print-report tr {
+    break-inside: avoid;
+  }
+}
